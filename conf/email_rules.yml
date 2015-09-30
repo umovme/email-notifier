@@ -1,0 +1,24 @@
+---
+- to: TO_03_MEDIÇÕES_TEMPERATURA
+  cc: CC
+  subject: SUBJECT
+  body: BODY_Principal
+  condition: VALIDA_SUBJECT_MANUT_ARCON_01_CONDENSADOR
+
+- to: TO - 01 - INICIO DA ATIVIDADE
+  cc: CC
+  subject: SUBJECT-BANCO DE BATERIA - SIM/NÃO
+  body: 
+  condition: VALIDA-SUBJECT-BANCO DE BATERIA - SIM/NÃO
+
+- to: TO_03_MEDIÇÕES_TEMPERATURA
+  cc: CC
+  subject: SUBJECT
+  body: BODY_Principal
+  condition: VALIDA_SUBJECT_MANUT_ARCON_01_CONDENSADOR
+
+- to: TO - 01 - INICIO DA ATIVIDADE
+  cc: CC
+  subject: SUBJECT-BANCO DE BATERIA - SIM/NÃO
+  body: 
+  condition: VALIDA-SUBJECT-BANCO DE BATERIA - SIM/NÃO
