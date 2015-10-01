@@ -6,13 +6,23 @@ GEM
     logging (2.0.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.10)
+    mail (2.6.3)
+      mime-types (>= 1.16, < 3)
+    mime-types (2.6.2)
     multi_json (1.11.2)
+    pony (1.11)
+      mail (>= 2.0)
     yml_reader (0.5)
 
 PLATFORMS
   ruby
+  x64-mingw32
 
 DEPENDENCIES
   csv_hasher
   logging
+  pony
   yml_reader
+
+BUNDLED WITH
+   1.10.6
