@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'email_sender'
 require 'email_rule'
+require_relative './fixture/email_rule_fixture'
 
 RSpec.describe EmailSender, "#Send Email" do
 	
@@ -24,25 +25,17 @@ RSpec.describe EmailSender, "#Send Email" do
 		it "Should return true when send email" do
 			pony = class_double('pony')
 			expect(pony).to receive(:mail)
-			expect(@email_sender.send?(build_email_rule , pony)).to eq(true)
+			expect(@email_sender.send?(EmailRuleFixture.build_email_rule , pony)).to eq(true)
 		end
 
 		it "Should return raise false when send email" do
 			pony = class_double('pony')
 			pony.should_receive(:mail).and_raise(Exception.new,'Error')
-			expect(@email_sender.send?(build_email_rule , pony)).to eq(false)
+			expect(@email_sender.send?(EmailRuleFixture.build_email_rule , pony)).to eq(false)
 		end
 
 	end
 
 end
 
-def build_email_rule 
-	emailRule = EmailRule.new
-	emailRule.to = "to@umov.me"
-	emailRule.cc = "cc@gmail.com"
-	emailRule.subject = "Teste"
-	emailRule.body = "Corpo do email de teste unitario envio de email"
-	emailRule
-end
 

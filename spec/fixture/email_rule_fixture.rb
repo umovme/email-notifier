@@ -10,4 +10,13 @@ class EmailRuleFixture
 		email_rule
 	end
 
+	def self.build_email_rule 
+		emailRule = EmailRule.new
+		emailRule.to = "to@umov.me"
+		emailRule.cc = "cc@gmail.com"
+		emailRule.subject = "Teste"
+		emailRule.body = "Corpo do email de teste unitario envio de email"
+		emailRule
+	end
+
 end
