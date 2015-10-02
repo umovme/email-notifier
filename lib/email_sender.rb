@@ -1,9 +1,9 @@
 require 'rubygems'
 require 'pony'
 require 'yaml'
+require_relative 'email_rule'
 
 class EmailSender
-
 
 	def load_options
 		YAML.load_file(File.join(File.dirname(__FILE__), '../conf/email_options.yml'))
@@ -23,6 +23,7 @@ class EmailSender
 	end
 
 	def send? email_rule, mail_handler = Pony
+		puts ''
 		get_settings
 		begin
 		 mail_handler.mail(:to => email_rule.to,

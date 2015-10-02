@@ -39,6 +39,20 @@ RSpec.describe EmailNotifier, "#Send Email" do
 
 	end
 
+	context "Reading header ..." do
+
+		before :each do
+		  @email_notifier = EmailNotifier.new
+		end
+
+		it "should build email rules based on header line ... " do
+			header = "rule1_to;rule1_cc;rule1_subject;rule1_body;rule1_condition"
+			rules_mapped_by_index = @email_notifier.load_email_rules header, @email_notifier.load_email_rules_settings
+			expect(rules_mapped_by_index[0].body_index).to eq(3)
+
+		end
+	end
+
 	context "Building emails to be send ..." do
 
 		before :each do
@@ -59,5 +73,7 @@ RSpec.describe EmailNotifier, "#Send Email" do
 		end
 
 	end
+
+	#map_email_rule
 
 end

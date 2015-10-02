@@ -5,8 +5,11 @@ require 'fileutils'
 require 'yaml'
 require 'logging'
 require_relative './email_rule'
+require_relative './email_sender'
 
 class EmailNotifier
+
+  @email_rules = Array.new
 
   def initialize
     @logger = Logging.logger('log/notifier.log')
@@ -19,9 +22,7 @@ class EmailNotifier
 
   def run
     log_start_process
-    load_email_rules_settings
     load_files.each do |filename|
-      puts 'running'
       process_file filename
     end
     log_finish_process
@@ -72,13 +73,20 @@ class EmailNotifier
     
     if( is_second_line counter )
       @logger.info "Loading header rules!!\n"
-      @@email_rules = load_email_rules file_line
+      @email_rules = load_email_rules file_line, load_email_rules_settings
       return
     end
 
-    @@populated_emails = build_emails file_line, @@email_rules
+    @@populated_emails = build_emails file_line, @email_rules
     send_emails @@populated_emails
 
+  end
+
+  def send_emails populated_emails
+    populated_emails.each do |email|
+      sender = EmailSender.new
+      sender.send email
+    end
   end
 
   def build_emails line, email_rules
@@ -87,27 +95,31 @@ class EmailNotifier
 
       csv_line = CSV.parse(line, :col_sep => ?;, headers: false) 
       csv_line.each do |line|
-        email_rule.to = line[email_rule.to_index]
-        email_rule.cc = line[email_rule.cc_index]
-        email_rule.subject = line[email_rule.subject_index]
-        email_rule.body = line[email_rule.body_index]
-        email_rule.condition = line[email_rule.condition_index]
+        email_rule.to = line[email_rule.to_index.to_i] unless email_rule.to_index.nil? 
+        email_rule.cc = line[email_rule.cc_index.to_i] unless email_rule.cc_index.nil?
+        email_rule.subject = line[email_rule.subject_index.to_i] unless email_rule.subject_index.nil?
+        email_rule.body = line[email_rule.body_index.to_i] unless email_rule.body_index.nil? 
+        email_rule.condition = line[email_rule.condition_index.to_i] unless email_rule.condition_index.nil?
       end
     end
     email_rules
   end
 
-  def load_email_rules header
+  def load_email_rules header, settings
     mapped_rules = []
     mapped_email_rules_count = 0
+
     csv_line = CSV.parse(header, :col_sep => ?;, headers: false)    
-    load_email_rules_settings.each do |email_rule|
+    settings.each do |email_rule|
 
       counter_column = 0
       mapped_email_rule = EmailRule.new
+      
       csv_line[0].each do |column|
         map_email_rule(email_rule, mapped_email_rule, column, counter_column)
+        counter_column = counter_column + 1
       end
+
       mapped_rules[mapped_email_rules_count] = mapped_email_rule
       mapped_email_rules_count = mapped_email_rules_count + 1
     end
@@ -116,27 +128,27 @@ class EmailNotifier
   end
 
   def map_email_rule email_rule, mapped_email_rule, column, counter_column
-    if(email_rule['to'] == column)
-      mapped_email_rule.to_index = counter_column.to_s
+    
+    if(email_rule['to'] == column )
+      mapped_email_rule.to_index = counter_column.to_i unless mapped_email_rule.to_index
     end
 
     if(email_rule['subject'] == column)
-      mapped_email_rule.subject_index = counter_column.to_s          
+      mapped_email_rule.subject_index = counter_column.to_i unless mapped_email_rule.subject_index
     end
 
     if(email_rule['cc'] == column)
-      mapped_email_rule.cc_index = counter_column.to_s
+      mapped_email_rule.cc_index = counter_column.to_i unless mapped_email_rule.cc_index
     end
 
     if(email_rule['body'] == column)
-      mapped_email_rule.body_index = counter_column.to_s
+      mapped_email_rule.body_index = counter_column.to_i unless mapped_email_rule.body_index
     end
 
     if(email_rule['condition'] == column)
-      mapped_email_rule.condition_index = counter_column.to_s
+      mapped_email_rule.condition_index = counter_column.to_i unless mapped_email_rule.condition_index
     end
 
-    counter_column = counter_column + 1
   end
 
   def is_first_line counter
@@ -149,7 +161,7 @@ class EmailNotifier
 
   def is_last_line line
     count_column=line.split(";").length
-    count_column < 2 and line.include? "FIM;"
+    count_column <= 2 and line.include? "FIM;"
   end
 
   def rename_file_to_processed file
