@@ -23,6 +23,3 @@ DEPENDENCIES
   logging
   pony
   yml_reader
-
-BUNDLED WITH
-   1.10.6

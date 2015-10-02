@@ -76,12 +76,25 @@ class EmailNotifier
       return
     end
 
-    process_rules(file_line, @@email_rules)
+    @@populated_emails = build_emails file_line, @@email_rules
+    send_emails @@populated_emails
 
   end
 
-  def process_rules email_rules
-    
+  def build_emails line, email_rules
+
+    email_rules.each do |email_rule|
+
+      csv_line = CSV.parse(line, :col_sep => ?;, headers: false) 
+      csv_line.each do |line|
+        email_rule.to = line[email_rule.to_index]
+        email_rule.cc = line[email_rule.cc_index]
+        email_rule.subject = line[email_rule.subject_index]
+        email_rule.body = line[email_rule.body_index]
+        email_rule.condition = line[email_rule.condition_index]
+      end
+    end
+    email_rules
   end
 
   def load_email_rules header
