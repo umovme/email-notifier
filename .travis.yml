@@ -9,4 +9,4 @@ before_script:
   - bundle install
 
 script:
-  - rspec spec
+  - bundle exec rspec spec/
