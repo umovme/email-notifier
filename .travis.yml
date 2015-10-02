@@ -11,6 +11,3 @@ before_install:
 
 before_script:
   - bundle install
-
-script:
-  - rspec spec	
