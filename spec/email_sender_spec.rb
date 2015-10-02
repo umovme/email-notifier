@@ -1,13 +1,13 @@
 require 'rubygems'
 require 'email_sender'
+require 'email_rule'
 
 RSpec.describe EmailSender, "#Send Email" do
 	
 	describe "when I get to send email_roule" do
 
-		before :all do
-			@pony = double('pony')
-			@email_sender = EmailSender.new @pony
+		before :all do			
+			@email_sender = EmailSender.new
 		end
 		
 		it "load email options" do
@@ -21,10 +21,28 @@ RSpec.describe EmailSender, "#Send Email" do
 			expect(options.length).to eq(1)
 		end
 
-		it "Should raise an error when send email" do
+		it "Should return true when send email" do
+			pony = class_double('pony')
+			expect(pony).to receive(:mail)
+			expect(@email_sender.send?(build_email_rule , pony)).to eq(true)
+		end
 
+		it "Should return raise false when send email" do
+			pony = class_double('pony')
+			pony.should_receive(:mail).and_raise(Exception.new,'Error')
+			expect(@email_sender.send?(build_email_rule , pony)).to eq(false)
 		end
 
 	end
 
 end
+
+def build_email_rule 
+	emailRule = EmailRule.new
+	emailRule.to_index = "to@umov.me"
+	emailRule.cc_index = "cc@gmail.com"
+	emailRule.subject_index = "Teste"
+	emailRule.body_index = "Corpo do email de teste unitario envio de email"
+	emailRule
+end
+
