@@ -12,6 +12,7 @@ GEM
     multi_json (1.11.2)
     pony (1.11)
       mail (>= 2.0)
+    rake (10.4.2)
     yml_reader (0.5)
 
 PLATFORMS
@@ -22,4 +23,5 @@ DEPENDENCIES
   csv_hasher
   logging
   pony
+  rake
   yml_reader
