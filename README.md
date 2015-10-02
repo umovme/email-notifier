@@ -1,5 +1,7 @@
 # email-notifier
 
+[![Build Status](https://travis-ci.org/umovme/email-notifier.svg?branch=master)](https://travis-ci.org/umovme/email-notifier)
+
 Setup
 -------------
 * Clone the repository below...

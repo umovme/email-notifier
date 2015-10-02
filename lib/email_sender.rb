@@ -25,11 +25,11 @@ class EmailSender
 	def send? email_rule, mail_handler = Pony
 		get_settings
 		begin
-		 mail_handler.mail(:to => email_rule.to_index,
-		 	:subject => email_rule.subject_index ,
-		 	:body => email_rule.body_index,
-		 	:cc =>email_rule.cc_index)
-		 puts email_rule.to_index + ': Email enviado com sucesso!'
+		 mail_handler.mail(:to => email_rule.to,
+		 	:subject => email_rule.subject ,
+		 	:body => email_rule.body,
+		 	:cc =>email_rule.cc)
+		 puts email_rule.to + ': Email enviado com sucesso!'
 		 true
 		rescue Exception=>e
 			puts e

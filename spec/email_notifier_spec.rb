@@ -1,4 +1,5 @@
 require 'email_notifier'
+require_relative './fixture/email_rule_fixture'
 
 RSpec.describe EmailNotifier, "#Send Email" do
 
@@ -38,12 +39,23 @@ RSpec.describe EmailNotifier, "#Send Email" do
 
 	end
 
-	context "Interpreting header file ..." do
+	context "Building emails to be send ..." do
 
-		it "loading header mapping the rules and fields" do
-			email_notifier = EmailNotifier.new
-			data_line = "rule1_to;rule1_cc;rule1_subject;rule1_body"
-			#email_notifier.process_rules data_line, []
+		before :each do
+		  @email_notifier = EmailNotifier.new
+		  @rules = [EmailRuleFixture.with_indexes_populated([0,1,2,3,4])]
+		end
+
+		it "should load 'TO' content ..." do
+			data_line = "rule1_to;rule1_cc;rule1_subject;rule1_body;rule1_body"
+			populated_email_list = @email_notifier.build_emails(data_line, @rules)
+			expect(populated_email_list[0].to).to eq('rule1_to')
+		end
+
+		it "should load 'TO' content ..." do
+			data_line = "rule1_to;rule1_cc;rule1_subject;rule1_body;rule1_body"
+			email_list = @email_notifier.build_emails(data_line, @rules)
+			expect(email_list[0].cc).to eq('rule1_cc')
 		end
 
 	end

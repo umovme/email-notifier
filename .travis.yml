@@ -1,0 +1,13 @@
+language: ruby
+
+root:
+  - false
+
+rvm:
+  - 1.9.3
+
+before_install:
+  - gem install bundler
+
+before_script:
+  - bundle install

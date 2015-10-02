@@ -39,10 +39,10 @@ end
 
 def build_email_rule 
 	emailRule = EmailRule.new
-	emailRule.to_index = "to@umov.me"
-	emailRule.cc_index = "cc@gmail.com"
-	emailRule.subject_index = "Teste"
-	emailRule.body_index = "Corpo do email de teste unitario envio de email"
+	emailRule.to = "to@umov.me"
+	emailRule.cc = "cc@gmail.com"
+	emailRule.subject = "Teste"
+	emailRule.body = "Corpo do email de teste unitario envio de email"
 	emailRule
 end
 
