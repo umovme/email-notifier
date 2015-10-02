@@ -6,7 +6,7 @@ before_install:
   - gem install bundler
 
 before_script:
-  - bunlpe install
+  - bundle install
 
 script:
   - rspec spec/*
