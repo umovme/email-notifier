@@ -123,20 +123,20 @@ RSpec.describe EmailNotifier, "#Send Email" do
 
 		it "should don't send email once condition field is false" do
 			email = EmailRuleFixture.with_condition false.to_s
-			is_allowed = @email_notifier.is_allowed_email_condition email
-			expect(is_allowed).to be false
+			is_not_allowed = @email_notifier.is_not_allowed_email_condition email
+			expect(is_not_allowed).to be true
 		end
 
 		it "should don't send email once condition field is an unmapped value" do
 			email = EmailRuleFixture.with_condition "".to_s
-			is_allowed = @email_notifier.is_allowed_email_condition email
-			expect(is_allowed).to be false
+			is_not_allowed = @email_notifier.is_not_allowed_email_condition email
+			expect(is_not_allowed).to be true
 		end
 
 		it "should allow send email once condition field is true" do
 			email = EmailRuleFixture.with_condition true.to_s
-			is_allowed = @email_notifier.is_allowed_email_condition email
-			expect(is_allowed).to be true
+			is_not_allowed = @email_notifier.is_not_allowed_email_condition email
+			expect(is_not_allowed).to be false
 		end
 	end
 

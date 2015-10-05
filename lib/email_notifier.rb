@@ -100,18 +100,22 @@ class EmailNotifier
 
   def send_emails populated_emails
     populated_emails.each do |email|
-      #validate condition
-      is_allowed_email_condition email
+      
+      if(is_not_allowed_email_condition email)
+        @logger.info "condition is false ... won't send email for #{email.to} with condition #{email.condition}"
+        next
+      end
+
       #validate to, cc using @ and .
       @sender.send? email
     end
   end
 
-  def is_allowed_email_condition email_rule
+  def is_not_allowed_email_condition email_rule
     if(email_rule.condition.to_s.empty?)
-      return false
+      return true
     end
-    email_rule.condition.upcase == get_condition_value.upcase
+    email_rule.condition.to_s.upcase != get_condition_value.to_s.upcase
   end
 
   def load_email_rules header, settings
@@ -184,7 +188,7 @@ class EmailNotifier
   end
 
   def get_condition_value
-    @sender.load_options['condition_value'].to_s
+    @sender.load_options['condition_value']
   end
 
   def rename_file_to_processed file

@@ -9,7 +9,7 @@ class Helper
 		 	return false
 		 end
 
-		 if(column_name.upcase != email_rule_field.upcase)
+		 if(column_name.to_s.upcase != email_rule_field.to_s.upcase)
 		 	return false
 		 end
 
