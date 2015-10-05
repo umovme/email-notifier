@@ -51,6 +51,11 @@ RSpec.describe EmailNotifier, "#Send Email" do
 			expect(rules_mapped_by_index[0].body_index).to eq(3)
 
 		end
+		it "should build invalidate email rules with no required fileds fullfilled" do
+			header = "rule1_to;rule1_cc;rule1_subject;rule1_body;rule1_condition"
+			rules_mapped_by_index = @email_notifier.load_email_rules header, @email_notifier.load_email_rules_settings
+			expect(rules_mapped_by_index.length).to eq(1)
+		end
 	end
 
 	context "Building emails to be send ..." do
@@ -92,10 +97,12 @@ RSpec.describe EmailNotifier, "#Send Email" do
 
 	end
 
-	context "Should validate an email rule before sent it" do
+	context "should validate required fields for an email rule" do
+		
 		before :each do
 		  @email_notifier = EmailNotifier.new
 		end		
+		
 		it "should invalidate email_rule once there is no TO" do
 			rule_with_no_to = EmailRuleFixture.with_no_to
 			valid_email_rule = @email_notifier.validate_email_rule rule_with_no_to
@@ -106,6 +113,12 @@ RSpec.describe EmailNotifier, "#Send Email" do
 			rule_with_no_subject = EmailRuleFixture.with_no_subject
 			valid_email_rule = @email_notifier.validate_email_rule rule_with_no_subject
 			expect(valid_email_rule).to be false
+		end
+
+		it "should validate email_rule once having required fields(TO, SUBJECT)" do
+			rule_with_valid_rule = EmailRuleFixture.with_to_and_subject
+			valid_email_rule = @email_notifier.validate_email_rule rule_with_valid_rule
+			expect(valid_email_rule).to be true
 		end
 
 	end

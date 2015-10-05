@@ -21,13 +21,20 @@ class EmailRuleFixture
 
 	def self.with_no_to
 		email_rule = EmailRule.new
-		email_rule.to = ''
+		email_rule.to_index = ''
 		email_rule
 	end
 
 	def self.with_no_subject
 		email_rule = EmailRule.new
-		email_rule.subject = ''
+		email_rule.subject_index = ''
+		email_rule
+	end
+
+	def self.with_to_and_subject
+		email_rule = EmailRule.new
+		email_rule.to_index = "1"
+		email_rule.subject_index = '2'
 		email_rule
 	end
 

@@ -5,6 +5,7 @@ require 'fileutils'
 require 'yaml'
 require 'logging'
 require_relative './email_rule'
+require_relative './helper'
 require_relative './email_sender'
 
 class EmailNotifier
@@ -121,19 +122,22 @@ class EmailNotifier
         map_email_rule(setting_email_rule, email_rule, column, counter_column)
         counter_column = counter_column + 1
       end
-      #validate_email_rule email_rule
-      mapped_rules[email_rules_count] = email_rule
-      email_rules_count = email_rules_count + 1
+
+      if(validate_email_rule email_rule)
+        mapped_rules[email_rules_count] = email_rule
+        email_rules_count = email_rules_count + 1
+      end
+
     end
     @logger.info "#{mapped_rules.length} email rule(s) mapped"
     return mapped_rules
   end
 
   def validate_email_rule email_rule
-    #validate to and subject
-    if(email_rule.to.to_s.empty? || email_rule.subject.to_s.empty?)
+    if(email_rule.to_index.to_s.empty? || email_rule.subject_index.to_s.empty?)
       return false
     end
+    true
   end
 
   def map_email_rule setting_email_rule, mapped_email_rule, column, counter_column

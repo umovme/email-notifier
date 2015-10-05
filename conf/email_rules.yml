@@ -13,11 +13,11 @@
 
 - to: RULE3_TO
   cc: RULE3_CC
-  subject: RULE3_SUBJECT
+  subject: 
   body: RULE3_BODY
   condition: RULE3_CONDITION
 
-- to: RULE4_TO
+- to: 
   cc: RULE4_CC
   subject: RULE4_SUBJECT
   body: RULE4_BODY
