@@ -10,11 +10,11 @@ require_relative './email_sender'
 
 class EmailNotifier
 
-  @email_rules = Array.new
-
   def initialize
     @logger = Logging.logger('log/notifier.log')
     @logger.level = :info
+    @email_rules = Array.new
+    @sender = EmailSender.new
   end
 
   def load_email_rules_settings
@@ -82,7 +82,6 @@ class EmailNotifier
 
     @@populated_emails = build_emails file_line, @email_rules
     send_emails @@populated_emails
-
   end
 
   def build_emails line, email_rules
@@ -100,12 +99,19 @@ class EmailNotifier
   end
 
   def send_emails populated_emails
-    sender = EmailSender.new
     populated_emails.each do |email|
       #validate condition
+      is_allowed_email_condition email
       #validate to, cc using @ and .
-      sender.send? email
+      @sender.send? email
     end
+  end
+
+  def is_allowed_email_condition email_rule
+    if(email_rule.condition.to_s.empty?)
+      return false
+    end
+    email_rule.condition.upcase == get_condition_value.upcase
   end
 
   def load_email_rules header, settings
@@ -175,6 +181,10 @@ class EmailNotifier
   def is_last_line line
     count_column=line.split(";").length
     count_column <= 2 and line.include? "FIM;"
+  end
+
+  def get_condition_value
+    @sender.load_options['condition_value'].to_s
   end
 
   def rename_file_to_processed file

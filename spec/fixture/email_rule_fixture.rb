@@ -38,4 +38,10 @@ class EmailRuleFixture
 		email_rule
 	end
 
+	def self.with_condition value
+		email_rule = EmailRule.new
+		email_rule.condition = value
+		email_rule
+	end
+
 end

@@ -9,19 +9,23 @@ RSpec.describe EmailSender, "#Send Email" do
 
 		before :all do			
 			@email_sender = EmailSender.new
+			@options = @email_sender.load_options
 		end
 		
 		it "load email options" do
-			options = @email_sender.load_options
-			expect(options["config"].keys.include?('address')).to be true
-			expect(options["config"].keys.include?('port')).to be true
-			expect(options["config"].keys.include?('enable_starttls_auto')).to be true
-			expect(options["config"].keys.include?('user_name')).to be true
-			expect(options["config"].keys.include?('password')).to be true
-			expect(options["config"].keys.include?('domain')).to be true
-			expect(options.length).to eq(1)
+			
+			expect(@options["config"].keys.include?('address')).to be true
+			expect(@options["config"].keys.include?('port')).to be true
+			expect(@options["config"].keys.include?('enable_starttls_auto')).to be true
+			expect(@options["config"].keys.include?('user_name')).to be true
+			expect(@options["config"].keys.include?('password')).to be true
+			expect(@options["config"].keys.include?('domain')).to be true
 		end
 
+		it "should load definition of condition value" do
+			expect(@options['condition_value'].to_s.upcase).to eq('TRUE')
+		end
+		
 		it "Should return true when send email" do
 			pony = class_double('pony')
 			expect(pony).to receive(:mail)

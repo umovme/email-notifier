@@ -97,7 +97,7 @@ RSpec.describe EmailNotifier, "#Send Email" do
 
 	end
 
-	context "should validate required fields for an email rule" do
+	context "Validate required fields for an email rule" do
 		
 		before :each do
 		  @email_notifier = EmailNotifier.new
@@ -121,6 +121,23 @@ RSpec.describe EmailNotifier, "#Send Email" do
 			expect(valid_email_rule).to be true
 		end
 
+		it "should don't send email once condition field is false" do
+			email = EmailRuleFixture.with_condition false.to_s
+			is_allowed = @email_notifier.is_allowed_email_condition email
+			expect(is_allowed).to be false
+		end
+
+		it "should don't send email once condition field is an unmapped value" do
+			email = EmailRuleFixture.with_condition "".to_s
+			is_allowed = @email_notifier.is_allowed_email_condition email
+			expect(is_allowed).to be false
+		end
+
+		it "should allow send email once condition field is true" do
+			email = EmailRuleFixture.with_condition true.to_s
+			is_allowed = @email_notifier.is_allowed_email_condition email
+			expect(is_allowed).to be true
+		end
 	end
 
 end
