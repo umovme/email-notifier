@@ -30,7 +30,7 @@ RSpec.describe EmailSender, "#Send Email" do
 
 		it "Should return raise false when send email" do
 			pony = class_double('pony')
-			pony.should_receive(:mail).and_raise(Exception.new,'Error')
+			expect(pony).to receive(:mail).and_raise(Exception.new,'Expected exception')
 			expect(@email_sender.send?(EmailRuleFixture.build_email_rule , pony)).to eq(false)
 		end
 

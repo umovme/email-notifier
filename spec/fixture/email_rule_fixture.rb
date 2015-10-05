@@ -11,12 +11,24 @@ class EmailRuleFixture
 	end
 
 	def self.build_email_rule 
-		emailRule = EmailRule.new
-		emailRule.to = "to@umov.me"
-		emailRule.cc = "cc@gmail.com"
-		emailRule.subject = "Teste"
-		emailRule.body = "Corpo do email de teste unitario envio de email"
-		emailRule
+		email_rule = EmailRule.new
+		email_rule.to = "gelias@umov.me"
+		email_rule.cc = "guilherme.elias@gmail.com"
+		email_rule.subject = "Teste"
+		email_rule.body = "Corpo do email de teste unitario envio de email"
+		email_rule
+	end
+
+	def self.with_no_to
+		email_rule = EmailRule.new
+		email_rule.to = ''
+		email_rule
+	end
+
+	def self.with_no_subject
+		email_rule = EmailRule.new
+		email_rule.subject = ''
+		email_rule
 	end
 
 end

@@ -1,9 +1,15 @@
 require 'rubygems'
 require 'pony'
 require 'yaml'
+require 'logging'
 require_relative 'email_rule'
 
 class EmailSender
+
+	def initialize
+    	@logger = Logging.logger('log/notifier.log')
+    	@logger.level = :info
+  	end
 
 	def load_options
 		YAML.load_file(File.join(File.dirname(__FILE__), '../conf/email_options.yml'))
@@ -23,17 +29,17 @@ class EmailSender
 	end
 
 	def send? email_rule, mail_handler = Pony
-		puts ''
 		get_settings
 		begin
+		@logger.info "Email rule: #{email_rule.inspect}"
 		 mail_handler.mail(:to => email_rule.to,
 		 	:subject => email_rule.subject ,
 		 	:body => email_rule.body,
 		 	:cc =>email_rule.cc)
-		 puts email_rule.to + ': Email enviado com sucesso!'
+		 @logger.info "Email enviado com sucesso para #{email_rule.to}"
 		 true
-		rescue Exception=>e
-			puts e
+		rescue Exception=> e
+			@logger.error e
 			false
 		end
 	end

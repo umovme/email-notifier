@@ -22,7 +22,9 @@ class EmailNotifier
 
   def run
     log_start_process
-    load_files.each do |filename|
+    files_to_process = load_files
+    @logger.info "#{files_to_process.length} file(s) to process"
+    files_to_process.each do |filename|
       process_file filename
     end
     log_finish_process
@@ -82,17 +84,8 @@ class EmailNotifier
 
   end
 
-  def send_emails populated_emails
-    populated_emails.each do |email|
-      sender = EmailSender.new
-      sender.send email
-    end
-  end
-
   def build_emails line, email_rules
-
     email_rules.each do |email_rule|
-
       csv_line = CSV.parse(line, :col_sep => ?;, headers: false) 
       csv_line.each do |line|
         email_rule.to = line[email_rule.to_index.to_i] unless email_rule.to_index.nil? 
@@ -105,47 +98,63 @@ class EmailNotifier
     email_rules
   end
 
+  def send_emails populated_emails
+    sender = EmailSender.new
+    populated_emails.each do |email|
+      #validate condition
+      #validate to, cc using @ and .
+      sender.send? email
+    end
+  end
+
   def load_email_rules header, settings
     mapped_rules = []
-    mapped_email_rules_count = 0
+    email_rules_count = 0
 
     csv_line = CSV.parse(header, :col_sep => ?;, headers: false)    
-    settings.each do |email_rule|
+    settings.each do |setting_email_rule|
 
       counter_column = 0
-      mapped_email_rule = EmailRule.new
+      email_rule = EmailRule.new
       
       csv_line[0].each do |column|
-        map_email_rule(email_rule, mapped_email_rule, column, counter_column)
+        map_email_rule(setting_email_rule, email_rule, column, counter_column)
         counter_column = counter_column + 1
       end
-
-      mapped_rules[mapped_email_rules_count] = mapped_email_rule
-      mapped_email_rules_count = mapped_email_rules_count + 1
+      #validate_email_rule email_rule
+      mapped_rules[email_rules_count] = email_rule
+      email_rules_count = email_rules_count + 1
     end
     @logger.info "#{mapped_rules.length} email rule(s) mapped"
     return mapped_rules
   end
 
-  def map_email_rule email_rule, mapped_email_rule, column, counter_column
+  def validate_email_rule email_rule
+    #validate to and subject
+    if(email_rule.to.to_s.empty? || email_rule.subject.to_s.empty?)
+      return false
+    end
+  end
+
+  def map_email_rule setting_email_rule, mapped_email_rule, column, counter_column
     
-    if(email_rule['to'] == column )
+    if(Helper.is_column_match setting_email_rule['to'], column)
       mapped_email_rule.to_index = counter_column.to_i unless mapped_email_rule.to_index
     end
 
-    if(email_rule['subject'] == column)
+    if(Helper.is_column_match setting_email_rule['subject'], column)
       mapped_email_rule.subject_index = counter_column.to_i unless mapped_email_rule.subject_index
     end
 
-    if(email_rule['cc'] == column)
+    if(Helper.is_column_match setting_email_rule['cc'], column)
       mapped_email_rule.cc_index = counter_column.to_i unless mapped_email_rule.cc_index
     end
 
-    if(email_rule['body'] == column)
+    if(Helper.is_column_match setting_email_rule['body'], column)
       mapped_email_rule.body_index = counter_column.to_i unless mapped_email_rule.body_index
     end
 
-    if(email_rule['condition'] == column)
+    if(Helper.is_column_match setting_email_rule['condition'], column)
       mapped_email_rule.condition_index = counter_column.to_i unless mapped_email_rule.condition_index
     end
 
