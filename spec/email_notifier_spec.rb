@@ -104,19 +104,19 @@ RSpec.describe EmailNotifier, "#Send Email" do
 		end		
 		
 		it "should invalidate email_rule once there is no TO" do
-			rule_with_no_to = EmailRuleFixture.with_no_to
+			rule_with_no_to = EmailRuleFixture.with_no_to_index
 			valid_email_rule = @email_notifier.validate_email_rule rule_with_no_to
 			expect(valid_email_rule).to be false
 		end
 
 		it "should invalidate email_rule once there is no SUBJECT" do
-			rule_with_no_subject = EmailRuleFixture.with_no_subject
+			rule_with_no_subject = EmailRuleFixture.with_no_subject_index
 			valid_email_rule = @email_notifier.validate_email_rule rule_with_no_subject
 			expect(valid_email_rule).to be false
 		end
 
 		it "should validate email_rule once having required fields(TO, SUBJECT)" do
-			rule_with_valid_rule = EmailRuleFixture.with_to_and_subject
+			rule_with_valid_rule = EmailRuleFixture.with_to_and_subject_indexes
 			valid_email_rule = @email_notifier.validate_email_rule rule_with_valid_rule
 			expect(valid_email_rule).to be true
 		end
@@ -137,6 +137,24 @@ RSpec.describe EmailNotifier, "#Send Email" do
 			email = EmailRuleFixture.with_condition true.to_s
 			is_not_allowed = @email_notifier.is_not_allowed_email_condition email
 			expect(is_not_allowed).to be false
+		end
+
+		it "should invalidate email when TO field isn't filled" do
+			email = EmailRuleFixture.with_to nil
+			to_field_is_not_filled = @email_notifier.are_not_required_fields_filled? email
+			expect(to_field_is_not_filled).to be true
+		end
+
+		it "should validate email when TO field is correctly filled" do
+			email = EmailRuleFixture.with_to 'email@company.com'
+			to_field_is_not_filled = @email_notifier.are_not_required_fields_filled? email
+			expect(to_field_is_not_filled).to be false
+		end
+
+		it "should invalidate email when TO field doesn't has at(@)" do
+			email = EmailRuleFixture.with_to 'email_sem_aroba'
+			to_field_is_not_filled = @email_notifier.are_not_required_fields_filled? email
+			expect(to_field_is_not_filled).to be true
 		end
 	end
 

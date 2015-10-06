@@ -19,19 +19,19 @@ class EmailRuleFixture
 		email_rule
 	end
 
-	def self.with_no_to
+	def self.with_no_to_index
 		email_rule = EmailRule.new
 		email_rule.to_index = ''
 		email_rule
 	end
 
-	def self.with_no_subject
+	def self.with_no_subject_index
 		email_rule = EmailRule.new
 		email_rule.subject_index = ''
 		email_rule
 	end
 
-	def self.with_to_and_subject
+	def self.with_to_and_subject_indexes
 		email_rule = EmailRule.new
 		email_rule.to_index = "1"
 		email_rule.subject_index = '2'
@@ -41,6 +41,12 @@ class EmailRuleFixture
 	def self.with_condition value
 		email_rule = EmailRule.new
 		email_rule.condition = value
+		email_rule
+	end
+
+	def self.with_to value
+		email_rule = EmailRule.new
+		email_rule.to = value
 		email_rule
 	end
 

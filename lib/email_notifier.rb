@@ -107,8 +107,23 @@ class EmailNotifier
       end
 
       #validate to, cc using @ and .
+      if(are_not_required_fields_filled? email)
+        next
+      end
       @sender.send? email
     end
+  end
+
+  def are_not_required_fields_filled? email_rule
+    if(email_rule.to.to_s.empty?)
+      return true
+    end
+    
+    unless email_rule.to.to_s.include? "@"
+      return true
+    end
+
+    false
   end
 
   def is_not_allowed_email_condition email_rule
