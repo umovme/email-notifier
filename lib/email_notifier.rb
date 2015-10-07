@@ -44,7 +44,7 @@ class EmailNotifier
   end
 
   def log_finish_process
-    @logger.info "Emails successfully sent!!"
+    @logger.info "Emails rules processed!!"
     @logger.info "=========================================="
   end
 
