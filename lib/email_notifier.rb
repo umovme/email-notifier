@@ -62,7 +62,7 @@ class EmailNotifier
         end
         rename_file_to_processed file
     rescue => err
-        @logger.info "Exception: #{err}"
+        @logger.error "Exception: #{err}"
         err
     end
   end
@@ -102,7 +102,7 @@ class EmailNotifier
     populated_emails.each do |email|
       
       if(is_not_allowed_email_condition email)
-        @logger.info "condition is false ... won't send email for #{email.inspect}"
+        @logger.error "condition is false ... won't send email to #{email.inspect}"
         next
       end
 
@@ -122,10 +122,12 @@ class EmailNotifier
 
   def has_not_valid_to? email
     if(email.to.to_s.empty?)
+      @logger.error "TO is empty ... won't send email to #{email.inspect}"
       return true
     end
     
     unless email.to.to_s.include? "@"
+      @logger.error "TO is not an valid email address ... won't send email to #{email.inspect}"
       return true
     end
     false
@@ -133,6 +135,7 @@ class EmailNotifier
 
   def has_not_valid_subject? email
     if(email.subject.to_s.empty?)
+      @logger.error "SUBJECT is empty ... won't send email to #{email.inspect}"
       return true
     end
     false
