@@ -50,4 +50,10 @@ class EmailRuleFixture
 		email_rule
 	end
 
+	def self.with_subject value
+		email_rule = EmailRule.new
+		email_rule.subject = value
+		email_rule
+	end
+
 end

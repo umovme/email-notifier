@@ -115,14 +115,27 @@ class EmailNotifier
   end
 
   def are_not_required_fields_filled? email_rule
-    if(email_rule.to.to_s.empty?)
+    if( (has_not_valid_to? email_rule) or (has_not_valid_subject? email) )
+      return true
+    end
+    false
+  end
+
+  def has_not_valid_to? email
+    if(email.to.to_s.empty?)
       return true
     end
     
-    unless email_rule.to.to_s.include? "@"
+    unless email.to.to_s.include? "@"
       return true
     end
+    false
+  end
 
+  def has_not_valid_subject? email
+    if(email.subject.to_s.empty?)
+      return true
+    end
     false
   end
 

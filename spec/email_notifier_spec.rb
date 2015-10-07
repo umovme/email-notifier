@@ -141,21 +141,34 @@ RSpec.describe EmailNotifier, "#Send Email" do
 
 		it "should invalidate email when TO field isn't filled" do
 			email = EmailRuleFixture.with_to nil
-			to_field_is_not_filled = @email_notifier.are_not_required_fields_filled? email
+			to_field_is_not_filled = @email_notifier.has_not_valid_to? email
 			expect(to_field_is_not_filled).to be true
 		end
 
 		it "should validate email when TO field is correctly filled" do
 			email = EmailRuleFixture.with_to 'email@company.com'
-			to_field_is_not_filled = @email_notifier.are_not_required_fields_filled? email
-			expect(to_field_is_not_filled).to be false
+			to_field_is_correctly_filled = @email_notifier.has_not_valid_to? email
+			expect(to_field_is_correctly_filled).to be false
 		end
 
 		it "should invalidate email when TO field doesn't has at(@)" do
 			email = EmailRuleFixture.with_to 'email_sem_aroba'
-			to_field_is_not_filled = @email_notifier.are_not_required_fields_filled? email
+			to_field_is_not_filled = @email_notifier.has_not_valid_to? email
 			expect(to_field_is_not_filled).to be true
 		end
+
+		it "should invalidate email when SUBJECT field isn't filled" do
+			email = EmailRuleFixture.with_subject nil
+			subject_field_is_not_filled = @email_notifier.has_not_valid_subject? email
+			expect(subject_field_is_not_filled).to be true
+		end
+
+		it "should validate email when SUBJECT field is correctly filled" do
+			email = EmailRuleFixture.with_subject "Subject"
+			subject_field_is_not_filled = @email_notifier.has_not_valid_subject? email
+			expect(subject_field_is_not_filled).to be false
+		end
+
 	end
 
 end
