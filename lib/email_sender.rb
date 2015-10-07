@@ -31,7 +31,7 @@ class EmailSender
 	def send? email_rule, mail_handler = Pony
 		get_settings
 		begin
-		@logger.info "Email rule: #{email_rule.inspect}"
+		@logger.info "Enviando e-mail: #{email_rule.inspect}"
 		 mail_handler.mail(:to => email_rule.to,
 		 	:subject => email_rule.subject ,
 		 	:body => email_rule.body,

@@ -33,7 +33,7 @@ class EmailNotifier
 
   def process_file filename
     file = File.new(filename, "r")
-    @logger.info "  Starting processing file #{File.absolute_path(file)}"
+    @logger.info "Starting processing file #{File.absolute_path(file)}"
     load file
     file.close
   end
@@ -70,12 +70,12 @@ class EmailNotifier
   def process_data file_line, counter
     @logger.info "Processing line #{counter}"
     if( is_first_line counter or is_last_line file_line)
-      @logger.info "Discarting first/last line\n"
+      @logger.info "Discarting first/last line"
       return
     end
     
     if( is_second_line counter )
-      @logger.info "Loading header rules!!\n"
+      @logger.info "Loading header rules!!"
       @email_rules = load_email_rules file_line, load_email_rules_settings
       return
     end
@@ -102,11 +102,10 @@ class EmailNotifier
     populated_emails.each do |email|
       
       if(is_not_allowed_email_condition email)
-        @logger.info "condition is false ... won't send email for #{email.to} with condition #{email.condition}"
+        @logger.info "condition is false ... won't send email for #{email.inspect}"
         next
       end
 
-      #validate to, cc using @ and .
       if(are_not_required_fields_filled? email)
         next
       end
@@ -114,8 +113,8 @@ class EmailNotifier
     end
   end
 
-  def are_not_required_fields_filled? email_rule
-    if( (has_not_valid_to? email_rule) or (has_not_valid_subject? email) )
+  def are_not_required_fields_filled? email
+    if( (has_not_valid_to? email) or (has_not_valid_subject? email) )
       return true
     end
     false
