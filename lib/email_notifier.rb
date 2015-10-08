@@ -88,7 +88,7 @@ class EmailNotifier
     email_rules.each do |email_rule|
       csv_line = CSV.parse(line, :col_sep => ?;, headers: false) 
       csv_line.each do |line|
-        email_rule.to = line[email_rule.to_index.to_i] unless email_rule.to_index.nil? 
+        email_rule.to = line[email_rule.to_index.to_i] unless email_rule.to_index.nil?
         email_rule.cc = line[email_rule.cc_index.to_i] unless email_rule.cc_index.nil?
         email_rule.subject = line[email_rule.subject_index.to_i] unless email_rule.subject_index.nil?
         email_rule.body = line[email_rule.body_index.to_i] unless email_rule.body_index.nil? 
@@ -102,7 +102,7 @@ class EmailNotifier
     populated_emails.each do |email|
       
       if(is_not_allowed_email_condition email)
-        @logger.error "condition is false ... won't send email to #{email.inspect}"
+        @logger.error "Email rule #{email.rule_id} has condition false ... won't send email to #{email.inspect}"
         next
       end
 
@@ -122,12 +122,12 @@ class EmailNotifier
 
   def has_not_valid_to? email
     if(email.to.to_s.empty?)
-      @logger.error "TO is empty ... won't send email to #{email.inspect}"
+      @logger.error "Email rule #{email.rule_id} has TO empty ... won't send email to #{email.inspect}"
       return true
     end
     
     unless email.to.to_s.include? "@"
-      @logger.error "TO is not an valid email address ... won't send email to #{email.inspect}"
+      @logger.error "Email rule #{email.rule_id} has TO invalid email address ... won't send email to #{email.inspect}"
       return true
     end
     false
@@ -135,7 +135,7 @@ class EmailNotifier
 
   def has_not_valid_subject? email
     if(email.subject.to_s.empty?)
-      @logger.error "SUBJECT is empty ... won't send email to #{email.inspect}"
+      @logger.error "Email rule #{email.rule_id} has empty SUBJECT ... won't send email to #{email.inspect}"
       return true
     end
     false
@@ -162,6 +162,8 @@ class EmailNotifier
         map_email_rule(setting_email_rule, email_rule, column, counter_column)
         counter_column = counter_column + 1
       end
+
+      email_rule.rule_id = setting_email_rule['rule_id']
 
       if(validate_email_rule email_rule)
         mapped_rules[email_rules_count] = email_rule

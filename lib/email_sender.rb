@@ -36,7 +36,7 @@ class EmailSender
 		 	:subject => email_rule.subject ,
 		 	:body => email_rule.body,
 		 	:cc =>email_rule.cc)
-		 @logger.info "Email enviado com sucesso para #{email_rule.to}"
+		 @logger.info "Email from rule #{email_rule.rule_id} successfully sent to #{email_rule.to}"
 		 true
 		rescue Exception=> e
 			@logger.error e

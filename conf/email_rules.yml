@@ -1,23 +1,27 @@
 ---
-- to: RULE1_TO
+- rule_id: 1
+  to: RULE1_TO
   cc: RULE1_CC
   subject: RULE1_SUBJECT
   body: RULE1_BODY
   condition: RULE1_CONDITION
 
-- to: RULE2_TO
+- rule_id: 2
+  to: RULE2_TO
   cc: RULE2_TO
   subject: RULE2_SUBJECT
   body: RULE2_BODY
   condition: RULE2_CONDITION
 
-- to: RULE3_TO
+- rule_id: 3
+  to: RULE3_TO
   cc: RULE3_CC
   subject: 
   body: RULE3_BODY
   condition: RULE3_CONDITION
 
-- to: 
+- rule_id: 4
+  to: 
   cc: RULE4_CC
   subject: RULE4_SUBJECT
   body: RULE4_BODY

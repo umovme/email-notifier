@@ -4,36 +4,50 @@ require_relative './fixture/email_rule_fixture'
 RSpec.describe EmailNotifier, "#Send Email" do
 
 	context "Loading settings" do
+
+		before :each do
+		  @email_notifier = EmailNotifier.new
+		end
+
 		it "of email rules" do
-			email_notifier = EmailNotifier.new
-			settings = email_notifier.load_email_rules_settings
+			settings = @email_notifier.load_email_rules_settings
 			expect(settings.length).to eq(4)
 		end
+
+		it "should email rule has id" do 
+			email_rules = @email_notifier.load_email_rules_settings
+			expected_rule_id = 1
+			email_rules.each do |rule|
+				expect(rule['rule_id'].to_i).to eq(expected_rule_id.to_i)
+				expected_rule_id = expected_rule_id + 1
+			end
+		end
+
 	end
 	
 	context "Reading CSV file ..." do
 		
+		before :each do
+		  @email_notifier = EmailNotifier.new
+		end
+
 		it "should check that a specific line isn't the first line!" do
-			email_notifier = EmailNotifier.new
-			is_first_line = email_notifier.is_first_line 2
+			is_first_line = @email_notifier.is_first_line 2
 			expect(is_first_line).to be false
 		end
 
 		it "should check that a specific line isn't the first line!" do
-			email_notifier = EmailNotifier.new
-			is_first_line = email_notifier.is_first_line 1
+			is_first_line = @email_notifier.is_first_line 1
 			expect(is_first_line).to be true
 		end
 
 		it "should check that a specific line isn't the second line!" do
-			email_notifier = EmailNotifier.new
-			is_second_line = email_notifier.is_second_line 1
+			is_second_line = @email_notifier.is_second_line 1
 			expect(is_second_line).to be false
 		end
 
 		it "should check that a specific line is the second line!" do
-			email_notifier = EmailNotifier.new
-			is_second_line = email_notifier.is_second_line 2
+			is_second_line = @email_notifier.is_second_line 2
 			expect(is_second_line).to be true
 		end
 
@@ -55,6 +69,16 @@ RSpec.describe EmailNotifier, "#Send Email" do
 			header = "rule1_to;rule1_cc;rule1_subject;rule1_body;rule1_condition"
 			rules_mapped_by_index = @email_notifier.load_email_rules header, @email_notifier.load_email_rules_settings
 			expect(rules_mapped_by_index.length).to eq(1)
+		end
+
+		it "should build email rules with rule id" do
+			header = "rule1_to;rule1_cc;rule1_subject;rule1_body;rule1_condition;rule2_to;rule2_cc;rule2_subject;rule2_body;rule2_condition"
+			expected_rule_id = 1
+			rules_mapped_by_index = @email_notifier.load_email_rules header, @email_notifier.load_email_rules_settings
+			rules_mapped_by_index.each do |rule|
+				expect(rule.rule_id.to_i).to eq(expected_rule_id)
+				expected_rule_id = expected_rule_id + 1
+			end
 		end
 	end
 
