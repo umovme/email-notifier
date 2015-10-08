@@ -102,7 +102,7 @@ class EmailNotifier
     populated_emails.each do |email|
       
       if(is_not_allowed_email_condition email)
-        @logger.error "Email rule #{email.rule_id} has condition false ... won't send email to #{email.inspect}"
+        @logger.info "Email rule #{email.rule_id} has condition false ... won't send email to #{email.inspect}"
         next
       end
 
