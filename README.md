@@ -5,7 +5,11 @@
 Setup
 -------------
 * Install Ruby
-  * http://rubyinstaller.org/
+  * Windows: http://rubyinstaller.org/
+  * Unix baseb: 
+
+* Ruby Gems
+  * https://rubygems.org
 
 * Clone the repository below...
 ```
