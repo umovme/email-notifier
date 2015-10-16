@@ -6,7 +6,7 @@ Setup
 -------------
 * Install Ruby
   * Windows: http://rubyinstaller.org/
-  * Unix baseb: 
+  * Unix based: https://www.ruby-lang.org/en/ 
 
 * Ruby Gems
   * https://rubygems.org
