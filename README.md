@@ -5,7 +5,7 @@
 Setup
 -------------
 * Install Ruby
-* * http://rubyinstaller.org/
+  * http://rubyinstaller.org/
 
 * Clone the repository below...
 ```
