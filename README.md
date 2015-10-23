@@ -4,6 +4,13 @@
 
 Setup
 -------------
+* Install Ruby
+  * Windows: http://rubyinstaller.org/
+  * Unix based: https://www.ruby-lang.org/en/ 
+
+* Ruby Gems
+  * https://rubygems.org
+
 * Clone the repository below...
 ```
 git clone https://github.com/umovme/email-notifier.git
