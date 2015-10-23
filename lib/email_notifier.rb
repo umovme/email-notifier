@@ -36,6 +36,7 @@ class EmailNotifier
     @logger.info "Starting processing file #{File.absolute_path(file)}"
     load file
     file.close
+    rename_file_to_processed file
   end
 
   def load_files
@@ -60,7 +61,6 @@ class EmailNotifier
             counter = counter + 1
             process_data(line, counter)
         end
-        rename_file_to_processed file
     rescue => err
         @logger.error "Exception: #{err}"
         err
