@@ -14,7 +14,7 @@ O serviço foi desenvolvido na linguagem ruby, por isso é necessário instalar 
 * Windows: http://rubyinstaller.org/
 * Unix based: https://www.ruby-lang.org/en/
 
-####2.2) Instalar Ruby Gems
+####2.2 Instalar Ruby Gems
 Além do Ruby é necessário instalar o RubyGem, que é uma biblioteca, um conjunto de arquivos Ruby reusáveis, necessário para executar programas desenvolvidos na linguagem ruby.
 * Pode ser obtido em https://rubygems.org
 
